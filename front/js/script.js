@@ -22,8 +22,15 @@ fetch ("http://localhost:3000/api/products")
         a.appendChild(article);
         [img,h3,p].forEach(element=>article.appendChild(element));
 
-        a.setAttribute("href","product.html")
+        a.setAttribute("href","product.html")//On défini les attribus de "a".
 
+        a = product._id;
+        img.src = product.imageUrl;
+        img.alt = product.altTxt;
+        h3.innerHTML = product.name;//On modifi directement l'élément et on en fait du texte.
+        p.innerHTML = product.description;
+        
+        
         //<a href="./product.html?id=42">
             //<article>
               //<img src=".../product01.jpg" alt="Lorem ipsum dolor sit amet, Kanap name1">
@@ -35,4 +42,5 @@ fetch ("http://localhost:3000/api/products")
 })
 .catch((error)=>{
     console.log(error);
+    alert(error)
 });
