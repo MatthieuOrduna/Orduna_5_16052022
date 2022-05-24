@@ -22,9 +22,12 @@ fetch ("http://localhost:3000/api/products")
         a.appendChild(article);
         [img,h3,p].forEach(element=>article.appendChild(element));
 
-        a.setAttribute("href","product.html")//On défini les attribus de "a".
 
-        a = product._id;
+        productUrl = "./product.html?id=" + product._id;//C'est ce qui manqué pour obtenir l'Id.
+        a.setAttribute("href",productUrl)//On défini les attribus de "a".
+      
+       
+        console.log(a);
         img.src = product.imageUrl;
         img.alt = product.altTxt;
         h3.innerHTML = product.name;//On modifi directement l'élément et on en fait du texte.
