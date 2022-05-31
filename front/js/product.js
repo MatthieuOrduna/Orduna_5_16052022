@@ -1,19 +1,5 @@
-//const urlParams = new URLSearchParams(window.location.search);
-//const myParam = urlParams.get('myParam');
-//console.log(myParam);
-
 const productId = new URL(document.location).searchParams.get("id");
 console.log(productId);
-
-//fetch('http://localhost:3000/api/products/${productId}')
-//.then((res)=>{
-    //console.log("res",res);
-    //return res.json();
-//})
-//.catch((error)=>{
-    //console.log(error);
-    //alert(error)
-//});
 
 fetch(`http://localhost:3000/api/products/${productId}`)
         .then((response) => {
@@ -21,7 +7,7 @@ fetch(`http://localhost:3000/api/products/${productId}`)
         })
         .then((product) => { 
             
-           console.log(product);
+            console.log(product);
             const price = document.getElementById("price");
             price.innerHTML = product.price;
 
@@ -32,99 +18,68 @@ fetch(`http://localhost:3000/api/products/${productId}`)
             const img = document.createElement("img");
             document.querySelector(".item__img").appendChild(img);
             img.src = product.imageUrl;
+            img.alt = product.altTxt;
             
            
 
-    const title = document.getElementById("title");
-    title.innerHTML = product.name;
+            const title = document.getElementById("title");
+            title.innerHTML = product.name;
 
-    const colors = document.getElementById("colors");
+            const colors = document.getElementById("colors");
     
-    product.colors.forEach(productColor => {
-        const option = document.createElement("option");
-        colors.appendChild(option);
-        option.setAttribute("value","");
-        option.innerHTML = productColor;
-    });
+            product.colors.forEach(productColor => {
+                const option = document.createElement("option");
+                colors.appendChild(option);
+                option.setAttribute("value","");
+                option.innerHTML = productColor;
+            });
+
+        const addToCart = document.getElementById("addToCart");
+        addToCart.addEventListener("click", (transferData) => {
+            const quantityK = document.getElementById("quantity");
+            const optionK = document.getElementsByTagName("option");
+            const list = document.getElementById("colors").options;
+
+            const texte = list[document.getElementById("colors").selectedIndex].text;
+
+            console.log(quantityK.value, texte);
+
+            const cartItem = {
+                quantity : quantityK.value,
+                color : texte,
+                productId : product._id,
+            }
+
+            const cartItems = JSON.parse(localStorage.getItem("cartItems"))||[];
+            if (cartItems.some(item => item.productId === cartItem.productId && item.color=== cartItem.color)){
+                const foundItem = cartItems.find(item => item.productId ===cartItem.productId && item.color=== cartItem.color)
+                foundItem.quantity += cartItem.quantity
+                cartItems.splice(cartItems.map(item => item.productId).indexOf(cartItem.productId),1,foundItem) 
+                localStorage.setItem("cartItems",JSON.stringify(cartItems))           
+            }
+
+            else{
+                localStorage.setItem("cartItems",JSON.stringify(cartItems.concat(cartItem)))  
+            }
+
+            // localStorage.setItem("SelectionNumber",quantityK.value);
+            // localStorage.setItem("SelectionColor", texte);
+            // localStorage.setItem("SelectionImage", img.src);
+            // localStorage.setItem("SelectionAlt", img.alt);
+            // localStorage.setItem("SelectionTitle", title.innerHTML);
+            // console.log(localStorage);
+
+            productUrl = "./cart.html?id=" + product._id;
+            link = document.getElementById("addToCart");
+            link.setAttribute("href",productUrl);
+       
+            console.log(link);
+
+        return null;//? Cela modifie-t-il quelque chose à mon code?
+});
  
 })
         .catch((error)=>{
             console.log("etc",error);
             alert(error)
         });
-
-//img = document.createElement("img");
-//img.src = "../images/logo.png";
-//document.querySelector(".item__img").appendChild(img);
-////const image = document.getElementsByClassName("item__img");
-
-//const titre = document.getElementById("title");
-//title.innerHTML = "titre";
-
-//const prix = document.getElementById("price");
-//price.innerHTML = "256";
-
-//const description = document.getElementById("description");
-//description.innerHTML = "SUPER !"
-
-//const couleurs = document.getElementById("colors");
-//option1 = document.createElement("option");
-//option2 = document.createElement("option");
-//colors.appendChild(option1);
-//colors.appendChild(option2);
-//option1.setAttribute("value","");
-//option2.setAttribute("value","");
-//option1.innerHTML = "blanc";
-//option2.innerHTML = "vert";
-
-    //const colorus =["blanc","vert"];
-    
-    //for(let color of colorus){
-        //const couleurs = document.getElementById("colors");
-        //option = document.createElement("option");
-        //colors.appendChild(option);
-        //option.setAttribute("value","");
-        //option.innerHTML = color;
-    //}
- 
- 
-
-//fetch ("http://localhost:3000/api/products") 
-//.then((res)=> { 
-        //console.log("data",res); 
-        //return res.json(); 
-//})
-//.then((productId)=> {
-    //const prix = document.getElementById("price");
-    //price.innerHTML = products.price;
-
-    //const description = document.getElementById("description");
-    //description.innerHTML = products.description;
-
-    //img = document.createElement("img");
-    //img.src = products.imageURL;
-    //document.querySelector(".item__img").appendChild(img);
-
-    //const titre = document.getElementById("title");
-    //title.innerHTML = products.name;
-
-    //const couleurs = document.getElementById("colors");
-    //options.forEach(colors => {
-        //option = document.createElement("option");
-        //colors.appendChild(option);
-        //option.setAttribute("value","");
-        //option.innerHTML = products.colors;
-    //});
- 
-    //for(let color of products.colors){
-        //const couleurs = document.getElementById("colors");
-        //option = document.createElement("option");
-        //colors.appendChild(option);
-       // option.setAttribute("value","");
-        //option.innerHTML = color;
-    //}
-//})
-//.catch((error)=>{
-    //console.log(error);
-    //alert(error)
-//});
